@@ -26,18 +26,37 @@ jobs:
             dist/github-contribution-grid-snake.svg
             dist/github-contribution-grid-snake-dark.svg?palette=github-dark
       
-      # Add a step to modify SVG files to remove progress bar
+      # Add a step to modify SVG files to remove progress bar using direct text manipulation
       - name: Remove progress bar from SVGs
         run: |
-          # Install necessary tools
-          sudo apt-get update
-          sudo apt-get install -y xmlstarlet
+          # For light theme SVG
+          # 1. Remove rect elements with class "u"
+          sed -i '/<rect class="u /d' dist/github-contribution-grid-snake.svg
+          # 2. Remove the u class definitions in the style section
+          sed -i '/@keyframes u[0-9]/,/}/d' dist/github-contribution-grid-snake.svg
           
-          # Remove progress bar from light theme SVG
-          xmlstarlet ed --inplace -d "//svg:g[@id='progress-bar']" dist/github-contribution-grid-snake.svg || true
+          # For dark theme SVG
+          # 1. Remove rect elements with class "u"
+          sed -i '/<rect class="u /d' dist/github-contribution-grid-snake-dark.svg
+          # 2. Remove the u class definitions in the style section
+          sed -i '/@keyframes u[0-9]/,/}/d' dist/github-contribution-grid-snake-dark.svg
           
-          # Remove progress bar from dark theme SVG
-          xmlstarlet ed --inplace -d "//svg:g[@id='progress-bar']" dist/github-contribution-grid-snake-dark.svg || true
+          # Adjust viewBox to remove the space where progress bar was
+          # Extract current viewBox values
+          for file in dist/github-contribution-grid-snake*.svg; do
+            # Get current viewBox
+            viewBox=$(grep -o 'viewBox="[^"]*"' $file | head -1)
+            # Extract values
+            values=$(echo $viewBox | sed 's/viewBox="\(.*\)"/\1/')
+            # Split into components
+            read -r x y width height <<< $(echo $values | tr ' ' '\n')
+            # Reduce height by 15 to remove progress bar area
+            new_height=$((height - 15))
+            # Create new viewBox
+            new_viewBox="viewBox=\"$x $y $width $new_height\""
+            # Replace in file
+            sed -i "s|$viewBox|$new_viewBox|" $file
+          done
           
       # Push the generated files to the repository
       - name: Push changes
