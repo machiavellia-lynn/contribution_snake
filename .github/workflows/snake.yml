@@ -14,11 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      # Get current time and date
-      - name: Get Current Time
-        id: cur-time
-        run: echo "time=$(date +'%Y-%m-%d %H:%M')" >> $GITHUB_OUTPUT
-
       
       # Generates the snake animation
       - name: Generate Snake
@@ -33,5 +28,5 @@ jobs:
       - name: Push changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: 'Updated contributions on ${{ steps.cur-time.outputs.time }}'
+          commit_message: 'Added new contributions on ${{ steps.cur-time.outputs.time }}'
           file_pattern: 'dist/*'

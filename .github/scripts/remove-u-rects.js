@@ -2,27 +2,37 @@ const fs = require('fs');
 const path = require('path');
 const { JSDOM } = require('jsdom');
 
-// Path to the SVG file
-const svgFilePath = path.resolve(__dirname, '../../Tests/test.svg');
+// Path to the SVG files
+const svgDir = path.resolve(__dirname, '../../dist/');
 
-// Read the SVG file
-let svgContent = fs.readFileSync(svgFilePath, 'utf8');
+function removeProgressBar(svgFile) {
+    const fullPath = path.join(svgDir, svgFile);
 
-// Parse SVG with JSDOM
-const dom = new JSDOM(svgContent, { contentType: 'image/svg+xml' });
-const document = dom.window.document;
+    // Read the SVG file
+    let svgContent = fs.readFileSync(fullPath, 'utf8');
 
-// Find all rect elements with class starting with "u"
-const uRects = document.querySelectorAll('rect[class^="u u"]');
-console.log(`Found ${uRects.length} rect elements with class "u"`);
+    // Parse SVG with JSDOM
+    const dom = new JSDOM(svgContent, { contentType: 'image/svg+xml' });
+    const document = dom.window.document;
 
-// Remove all matching elements
-uRects.forEach(rect => {
-  rect.parentNode.removeChild(rect);
-});
+    // Find all rect elements with class starting with "u"
+    const uRects = document.querySelectorAll('rect[class^="u u"]');
+    console.log(`Found ${uRects.length} rect elements with class "u"`);
 
-// Save the modified SVG
-const updatedSvg = dom.serialize();
-fs.writeFileSync(svgFilePath, updatedSvg, 'utf8');
+    // Remove all matching elements
+    uRects.forEach(rect => {
+      rect.parentNode.removeChild(rect);
+    });
 
-console.log('Successfully removed all "u" class rectangles from SVG');
+    // Save the modified SVG
+    const updatedSvg = dom.serialize();
+    fs.writeFileSync(fullPath, updatedSvg, 'utf8');
+
+    console.log(`Successfully removed progress bar from ${svgFile}`);
+}
+
+for (const file of fs.readdirSync(svgDir)) {
+    if (file.endsWith('.svg')) {
+        removeProgressBar(file);
+    }
+}
