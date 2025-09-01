@@ -1,0 +1,33 @@
+name: Remove U Rectangles from SVG
+
+on:
+  workflow_dispatch:  # Manual trigger
+  push:
+    paths:
+      - '**/*.svg'  # Run when SVG files are modified
+
+jobs:
+  remove-u-rects:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install jsdom
+
+      - name: Process SVG
+        run: node .github/scripts/remove-u-rects.js
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add -A
+          git diff --quiet && git diff --staged --quiet || git commit -m "Remove u rectangles from SVG"
+          git push
