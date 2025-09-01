@@ -17,47 +17,69 @@ jobs:
       # Checks repo under $GITHUB_WORKSPACE with updated version
       - uses: actions/checkout@v3
       
-      # Generates the snake animation
+      # Setup environment
+      - name: Setup environment
+        run: |
+          # Ensure system packages are updated
+          sudo apt-get update
+          
+          # Install any required dependencies (sed and grep are pre-installed on Ubuntu)
+          sudo apt-get install -y --no-install-recommends jq xmlstarlet
+          
+          # Create dist directory if it doesn't exist
+          mkdir -p dist
+          
+          echo "Environment is ready"
+      
+      # Generate the snake animations
       - name: Generate Snake
         uses: Platane/snk@v3
+        id: snake-gif
         with:
           github_user_name: ${{ github.repository_owner }}
           outputs: |
             dist/github-contribution-grid-snake.svg
             dist/github-contribution-grid-snake-dark.svg?palette=github-dark
       
-      # Add a step to modify SVG files to remove progress bar using direct text manipulation
+      # Post-process the SVG files to remove progress bar
       - name: Remove progress bar from SVGs
         run: |
-          # For light theme SVG
-          # 1. Remove rect elements with class "u"
-          sed -i '/<rect class="u /d' dist/github-contribution-grid-snake.svg
-          # 2. Remove the u class definitions in the style section
-          sed -i '/@keyframes u[0-9]/,/}/d' dist/github-contribution-grid-snake.svg
+          echo "Starting SVG post-processing..."
           
-          # For dark theme SVG
-          # 1. Remove rect elements with class "u"
-          sed -i '/<rect class="u /d' dist/github-contribution-grid-snake-dark.svg
-          # 2. Remove the u class definitions in the style section
-          sed -i '/@keyframes u[0-9]/,/}/d' dist/github-contribution-grid-snake-dark.svg
-          
-          # Adjust viewBox to remove the space where progress bar was
-          # Extract current viewBox values
+          # Process each SVG file
           for file in dist/github-contribution-grid-snake*.svg; do
+            echo "Processing $file..."
+            
+            # Remove all rect elements with class "u" (progress bar rectangles)
+            sed -i '/<rect class="u /d' $file
+            
+            # Remove the u class definitions in the style section
+            sed -i '/@keyframes u[0-9]/,/}/d' $file
+            sed -i '/\.u\./,/}/d' $file
+            sed -i '/\.u{/,/}/d' $file
+            
+            # Adjust viewBox to remove the space where progress bar was
             # Get current viewBox
             viewBox=$(grep -o 'viewBox="[^"]*"' $file | head -1)
-            # Extract values
-            values=$(echo $viewBox | sed 's/viewBox="\(.*\)"/\1/')
-            # Split into components
-            read -r x y width height <<< $(echo $values | tr ' ' '\n')
-            # Reduce height by 15 to remove progress bar area
-            new_height=$((height - 15))
-            # Create new viewBox
-            new_viewBox="viewBox=\"$x $y $width $new_height\""
-            # Replace in file
-            sed -i "s|$viewBox|$new_viewBox|" $file
+            if [ ! -z "$viewBox" ]; then
+              # Extract values
+              values=$(echo $viewBox | sed 's/viewBox="\(.*\)"/\1/')
+              # Split into components
+              read -r x y width height <<< $(echo $values | tr ' ' '\n')
+              # Reduce height to remove progress bar area
+              new_height=$((height - 15))
+              # Create new viewBox
+              new_viewBox="viewBox=\"$x $y $width $new_height\""
+              # Replace in file
+              sed -i "s|$viewBox|$new_viewBox|" $file
+              echo "Updated viewBox from $viewBox to $new_viewBox"
+            fi
+            
+            echo "Completed processing $file"
           done
           
+          echo "SVG post-processing completed"
+      
       # Push the generated files to the repository
       - name: Push changes
         uses: stefanzweifel/git-auto-commit-action@v4
