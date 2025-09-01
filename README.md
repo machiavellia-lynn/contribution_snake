@@ -1,1 +1,1 @@
-<img src="https://raw.githubusercontent.com/Saviru/contribution_snake/main/dist/github-contribution-grid-snake-dark.svg">
+<img src="dist/github-contribution-grid-snake-dark.svg">
