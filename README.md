@@ -3,7 +3,7 @@
 ## v1.9.25
 
 A dynamic SVG animation that displays your GitHub contribution graph as a snake game! This project automatically generates and updates the snake animation based on your GitHub activity.
-
+<a name="howto"><a><a name="howto"><a>
 ## Dark Theme
 
 <img src="dist/github-contribution-grid-snake-dark.svg">
@@ -40,9 +40,7 @@ This project uses [Platane/snk](https://github.com/Platane/snk) to generate a sn
 3. **Customize the workflow file** at `.github/workflows/snake.yml` if needed
 4. **Add the snake animation to your profile**:
 
-   ```markdown
-   ![Snake animation](https://github.com/{your-username}/{repository-name}/blob/main/dist/github-contribution-grid-snake-dark.svg)
-   ```
+   [See here](#howto)
 
    Replace `{your-username}` and `{repository-name}` with your GitHub username and the name of your repository.
 
