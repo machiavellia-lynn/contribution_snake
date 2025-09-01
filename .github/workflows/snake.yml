@@ -17,7 +17,7 @@ jobs:
       # Get current time and date
       - name: Get Current Time
         id: cur-time
-        run: echo "time=$(date + '%Y-%m-%d %H:%M')" >> $SNAKE_ENV
+        run: echo "time=$(date +'%Y-%m-%d %H:%M')" >> $GITHUB_OUTPUT
 
       
       # Generates the snake animation
