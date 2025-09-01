@@ -17,9 +17,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       
-      - name: Sleep for 3 seconds
-        id: interval
-        run: sleep 3s
 
       - name: Get Current Time
         id: cur-time
