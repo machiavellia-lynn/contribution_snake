@@ -9,7 +9,7 @@ A dynamic SVG animation that displays your GitHub contribution graph as a snake 
 <img src="dist/github-contribution-grid-snake-dark.svg">
 
 ```markdown
-   ![Snake animation](https://github.com/{your-username}/{repository-name}/blob/main/dist/github-contribution-grid-snake-dark.svg)
+![Snake animation](https://github.com/{your-username}/{repository-name}/blob/main/dist/github-contribution-grid-snake-dark.svg)
 ```
 
 
@@ -19,7 +19,7 @@ A dynamic SVG animation that displays your GitHub contribution graph as a snake 
 <img src="dist/github-contribution-grid-snake.svg">
 
 ```markdown
-   ![Snake animation](https://github.com/{your-username}/{repository-name}/blob/main/dist/github-contribution-grid-snake.svg)
+![Snake animation](https://github.com/{your-username}/{repository-name}/blob/main/dist/github-contribution-grid-snake.svg)
    ```
 
 ## 📋 About
