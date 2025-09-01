@@ -6,6 +6,9 @@ on:
     paths:
       - '**/*.svg'  # Run when SVG files are modified
 
+permissions:
+  contents: write
+
 jobs:
   remove-u-rects:
     runs-on: ubuntu-latest
