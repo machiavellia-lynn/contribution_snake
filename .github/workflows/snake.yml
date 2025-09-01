@@ -15,8 +15,37 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      # Generates the snake animation
+      # Check if there were any contributions today
+      - name: Check for contributions
+        id: check-contributions
+        run: |
+          TODAY=$(date +%Y-%m-%d)
+          YESTERDAY=$(date -d "yesterday" +%Y-%m-%d)
+          
+          # Query GitHub API for contributions
+          CONTRIBUTION_COUNT=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/users/${{ github.repository_owner }}/events?per_page=100" | \
+            jq "[.[] | select(.created_at | startswith(\"$TODAY\") or startswith(\"$YESTERDAY\")) | \
+            select(.type == \"PushEvent\" or .type == \"PullRequestEvent\" or \
+                   .type == \"IssuesEvent\" or .type == \"IssueCommentEvent\" or \
+                   .type == \"PullRequestReviewCommentEvent\" or .type == \"CommitCommentEvent\")] | length")
+          
+          echo "Found $CONTRIBUTION_COUNT contributions today or yesterday"
+          if [ "$CONTRIBUTION_COUNT" -gt "0" ]; then
+            echo "has_contributions=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_contributions=false" >> $GITHUB_OUTPUT
+          fi
+      
+      # Get current date for commit message
+      - name: Get current time
+        id: cur-time
+        run: echo "time=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_OUTPUT
+      
+      # Generates the snake animation only if there were contributions
       - name: Generate Snake
+        if: steps.check-contributions.outputs.has_contributions == 'true'
         uses: Platane/snk@v3
         with:
           github_user_name: ${{ github.repository_owner }}
@@ -24,8 +53,9 @@ jobs:
             dist/github-contribution-grid-snake.svg?color_snake=blue
             dist/github-contribution-grid-snake-dark.svg?palette=github-dark&color_snake=red
                 
-      # Push the generated files to the repository
+      # Push the generated files to the repository only if there were contributions
       - name: Push changes
+        if: steps.check-contributions.outputs.has_contributions == 'true'
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: 'Added new contributions on ${{ steps.cur-time.outputs.time }}'
