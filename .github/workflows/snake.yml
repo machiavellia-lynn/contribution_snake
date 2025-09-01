@@ -31,9 +31,9 @@ jobs:
           commit_message: 'Added new contributions on ${{ steps.cur-time.outputs.time }}'
           file_pattern: 'dist/*'
 
-      - name: Sleep for 10 seconds
+      - name: Sleep for 50 seconds
         id: interval
-        run: sleep 10s
+        run: sleep 50s
 
   deploy:
     needs: build
