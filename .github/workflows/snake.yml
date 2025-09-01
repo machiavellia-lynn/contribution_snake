@@ -30,3 +30,12 @@ jobs:
         with:
           commit_message: 'Added new contributions on ${{ steps.cur-time.outputs.time }}'
           file_pattern: 'dist/*'
+
+      - name: Sleep for 2 seconds
+        id: interval
+        run: sleep 2s
+
+  deploy:
+    needs: build
+    uses: ./.github/workflows/remove_progressBar.yml
+    secrets: inherit
