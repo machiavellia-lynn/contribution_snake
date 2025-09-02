@@ -1,6 +1,8 @@
 # GitHub Contribution Snake Animation
 
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/Saviru/contribution_snake/snake.yml) ![GitHub forks](https://img.shields.io/github/forks/Saviru/contribution_snake) ![GitHub Repo stars](https://img.shields.io/github/stars/Saviru/contribution_snake)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/Saviru/contribution_snake/snake.yml) ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/saviru/contribution_snake/remove_progressBar.yml?label=Post%20processing)
+
+![GitHub forks](https://img.shields.io/github/forks/Saviru/contribution_snake) ![GitHub Repo stars](https://img.shields.io/github/stars/Saviru/contribution_snake)
 
 
 ## v1.9.25
@@ -41,7 +43,8 @@ This project uses [Platane/snk](https://github.com/Platane/snk) to generate a sn
 1. **Fork this repository**
 2. **Enable GitHub Actions** in your repository settings
 3. **Customize the workflow file** at `.github/workflows/snake.yml` if needed
-4. **Add the snake animation to your profile**:
+4. **First run workflow manually** at `.github/workflows/snake.yml` (Otherwise it will start at midnight automatically.)
+5. **Add the snake animation to your profile**:
 
    [See here](#howto)
 
