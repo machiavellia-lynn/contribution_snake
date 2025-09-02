@@ -1,5 +1,8 @@
 # GitHub Contribution Snake Animation
 
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/Saviru/contribution_snake/snake.yml) ![GitHub forks](https://img.shields.io/github/forks/Saviru/contribution_snake) ![GitHub Repo stars](https://img.shields.io/github/stars/Saviru/contribution_snake)
+
+
 ## v1.9.25
 
 A dynamic SVG animation that displays your GitHub contribution graph as a snake game! This project automatically generates and updates the snake animation based on your GitHub activity.
