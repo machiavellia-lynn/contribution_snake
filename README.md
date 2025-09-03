@@ -48,7 +48,7 @@ This project uses [Platane/snk](https://github.com/Platane/snk) to generate a sn
 
    [See here](#howto)
 
-   Replace `{your-username}` and `{repository-name}` with your GitHub username and the name of your repository.
+   Replace `{your-username}` and `{forked-repository-name}` with your GitHub username and the name of your repository.
 
 ## ⚙️ Customization
 
